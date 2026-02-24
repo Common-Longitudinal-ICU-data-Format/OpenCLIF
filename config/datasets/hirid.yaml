@@ -1,0 +1,209 @@
+# HiRID - High Time Resolution ICU Dataset
+# Source: https://physionet.org/content/hirid/
+# Time: Absolute datetime (but relative ms available)
+
+name: hirid
+display_name: "HiRID - High Time Resolution ICU Dataset"
+version: "1.1.1"
+source_url: "https://physionet.org/content/hirid/1.1.1"
+file_format: parquet  # Distributed as Apache Parquet
+
+# Time configuration
+time:
+  type: absolute  # Uses datetime column
+  unit: datetime
+  start_point: "2020-01-01T08:00:00Z"  # Fallback for relative conversion
+  # Note: HiRID has both datetime and relative reldatetime columns
+
+# ID configuration
+ids:
+  patient_id: patientid
+  encounter_id: patientid  # HiRID uses same ID for both
+  encounter_table: general
+
+# Tables
+tables:
+  # General patient information
+  general:
+    file: general_table.parquet
+    # Also available as: general_table/part-*.parquet (partitioned)
+    description: "Patient-level information"
+    id_column: patientid
+    columns:
+      - name: patientid
+        type: int
+        description: "Patient/encounter ID (primary key)"
+      - name: admissiontime
+        type: datetime
+        time_var: true
+        description: "ICU admission time"
+      - name: age
+        type: float
+        clif_category: age
+      - name: sex
+        type: string
+        description: "M/F"
+      - name: discharge_status
+        type: string
+        description: "alive/dead"
+
+  # Observations (vitals, labs, measurements)
+  observations:
+    file: observation_tables/parquet/  # Directory of partitioned parquet files
+    # Alternative: merged/observation_tables_merged.parquet
+    description: "All observations (vitals, labs) - high frequency"
+    id_column: patientid
+    time_column: datetime
+    value_column: value
+    category_column: variableid
+    category_type: int
+    columns:
+      - name: patientid
+        type: int
+      - name: datetime
+        type: datetime
+        time_var: true
+      - name: variableid
+        type: int
+        description: "Variable ID - maps to hirid_variable_reference"
+      - name: value
+        type: float
+      - name: status
+        type: int
+        description: "Quality flag (8 = merged value)"
+
+  # Pharma (medications)
+  pharma:
+    file: pharma_records/parquet/  # Partitioned
+    # Alternative: merged/pharma_records_merged.parquet
+    description: "Medication administrations"
+    id_column: patientid
+    time_column: datetime
+    category_column: pharmaid
+    category_type: int
+    columns:
+      - name: patientid
+        type: int
+      - name: datetime
+        type: datetime
+        time_var: true
+      - name: pharmaid
+        type: int
+        description: "Medication ID"
+      - name: infusionid
+        type: int
+        description: "Groups related infusion records"
+      - name: typeid
+        type: int
+        description: "1=infusion, 2=bolus"
+      - name: giession
+        type: float
+        description: "Amount given"
+      - name: rate
+        type: float
+        description: "Infusion rate"
+      - name: status
+        type: int
+
+  # Variable reference table
+  hirid_variable_reference:
+    file: hirid_variable_reference.csv
+    description: "Reference table for variable IDs"
+    id_column: variableid
+    columns:
+      - name: Source Table
+        type: string
+      - name: ID
+        type: string
+      - name: variableid
+        type: int
+      - name: Variable Name
+        type: string
+      - name: Unit
+        type: string
+      - name: lowerbound
+        type: float
+      - name: upperbound
+        type: float
+
+# Variable ID mappings for vitals (from ricu concept-dict)
+vital_id_map:
+  410: temp_c     # Core Temp
+  400: temp_c     # Bladder Temp
+  7100: temp_c    # Skin Temp
+  200: heart_rate
+  100: sbp        # Invasive systolic
+  120: dbp        # Invasive diastolic
+  110: map        # Invasive MAP
+  610: map        # MAP other
+  4000: spo2
+  8280: spo2
+  300: respiratory_rate
+  310: respiratory_rate
+  10000450: height_cm
+  10000400: weight_kg
+
+# Variable ID mappings for labs (from ricu concept-dict)
+lab_id_map:
+  24000605: albumin
+  20002700: alkaline_phosphatase
+  20002600: alt
+  24000330: ast
+  20004200: bicarbonate
+  20004300: bilirubin_total
+  24000560: bilirubin_conjugated
+  20004100: bun
+  20005100: calcium_total
+  24000522: calcium_ionized
+  24000439: chloride
+  24000521: chloride
+  20000600: creatinine
+  20002200: crp
+  24000668: esr
+  20005110: glucose_serum
+  24000523: glucose_serum
+  24000585: glucose_serum
+  24000548: hemoglobin
+  24000836: hemoglobin
+  20000900: hemoglobin
+  24000567: inr
+  24000524: lactate
+  24000480: lymphocytes_percent
+  24000230: magnesium
+  24000550: neutrophils_percent
+  20001200: pco2_arterial
+  20000200: po2_arterial
+  20000300: ph_arterial
+  20000110: platelet_count
+  20000500: potassium
+  24000520: potassium
+  24000833: potassium
+  24000867: potassium
+  20004410: ptt
+  20000800: so2_arterial
+  20000400: sodium
+  24000519: sodium
+  24000658: sodium
+  24000835: sodium
+  24000866: sodium
+  24000806: troponin_t
+  20000700: wbc
+
+# Pharma ID mappings for medications
+med_id_map:
+  # Vasopressors
+  1000462: norepinephrine
+  1000656: norepinephrine
+  1000657: norepinephrine
+  1000658: norepinephrine
+  71: epinephrine
+  1000649: epinephrine
+  1000650: epinephrine
+  1000655: epinephrine
+  1000750: epinephrine
+  112: vasopressin
+  113: vasopressin
+  426: dobutamine
+  # Sedation
+  15: insulin
+  1000724: insulin

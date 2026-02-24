@@ -1,0 +1,229 @@
+# SICdb - Salzburg ICU Database
+# Source: https://physionet.org/content/sicdb/
+# Time: Relative minutes from admission (stored in Offset column)
+
+name: sic
+display_name: "Salzburg ICU Database (SICdb)"
+version: "1.0.6"
+source_url: "https://physionet.org/content/sicdb/1.0.6"
+file_format: csv.gz  # Available as gzipped CSV
+
+# Time configuration
+time:
+  type: relative
+  unit: minutes  # Offset is in minutes
+  start_point: "2020-01-01T08:00:00Z"
+
+# ID configuration
+ids:
+  patient_id: PatientID
+  encounter_id: CaseID
+  encounter_table: cases
+
+# Tables
+tables:
+  # Case/admission information
+  cases:
+    file: cases.csv.gz
+    description: "Case-level information (one row per ICU stay)"
+    id_column: CaseID
+    columns:
+      - name: CaseID
+        type: int
+        description: "ICU stay ID (primary key)"
+      - name: PatientID
+        type: int
+        description: "Patient ID"
+      - name: AgeOnAdmission
+        type: int
+        clif_category: age
+      - name: Sex
+        type: string
+        description: "M/F"
+      - name: WeightOnAdmission
+        type: float
+        clif_category: weight_kg
+        unit: kg
+      - name: HeightOnAdmission
+        type: float
+        clif_category: height_cm
+        unit: cm
+      - name: TimeOfStay
+        type: int
+        description: "Length of stay in minutes"
+      - name: OffsetOfDeath
+        type: int
+        description: "Offset of death (null if survived)"
+        time_var: true
+      - name: AdmissionYear
+        type: int
+
+  # High-frequency numeric data (vitals, etc.)
+  data_float_h:
+    file: data_float_h.csv.gz
+    description: "High-frequency numeric observations (vitals, measurements)"
+    id_column: CaseID
+    time_column: Offset
+    value_column: Val
+    category_column: DataID
+    category_type: int  # Numeric item IDs
+    columns:
+      - name: id
+        type: int
+        description: "Row ID"
+      - name: CaseID
+        type: int
+      - name: DataID
+        type: int
+        description: "Item ID - maps to d_references table"
+      - name: Offset
+        type: int
+        time_var: true
+        description: "Minutes from admission"
+      - name: Val
+        type: float
+        description: "Measured value"
+      - name: cnt
+        type: int
+        description: "Count (for aggregated values)"
+
+  # Reference table for data_float_h DataIDs
+  d_references:
+    file: d_references.csv.gz
+    description: "Reference table mapping DataID to descriptions"
+    id_column: ReferenceGlobalID
+    columns:
+      - name: id
+        type: int
+      - name: ReferenceGlobalID
+        type: int
+        description: "Maps to DataID in data_float_h"
+      - name: RefType
+        type: string
+      - name: ReferenceValue
+        type: string
+      - name: ReferenceUnit
+        type: string
+        description: "Unit of measurement"
+      - name: LongLabel
+        type: string
+        description: "Human-readable label"
+
+  # Laboratory results
+  laboratory:
+    file: laboratory.csv.gz
+    description: "Laboratory test results"
+    id_column: CaseID
+    time_column: Offset
+    value_column: LaboratoryValue
+    category_column: LaboratoryID
+    category_type: int
+    columns:
+      - name: id
+        type: int
+      - name: CaseID
+        type: int
+      - name: LaboratoryID
+        type: int
+        description: "Lab test ID - maps to d_laboratory"
+      - name: Offset
+        type: int
+        time_var: true
+      - name: LaboratoryValue
+        type: float
+
+  # Laboratory reference table
+  d_laboratory:
+    file: d_laboratory.csv.gz
+    description: "Reference table for laboratory IDs"
+    id_column: LaboratoryID
+    columns:
+      - name: LaboratoryID
+        type: int
+      - name: LaboratoryType
+        type: string
+      - name: LaboratoryName
+        type: string
+      - name: LaboratoryUnit
+        type: string
+
+  # Medication data
+  medication:
+    file: medication.csv.gz
+    description: "Medication administrations"
+    id_column: CaseID
+    time_column: Offset
+    category_column: DrugID
+    category_type: int
+    columns:
+      - name: id
+        type: int
+      - name: CaseID
+        type: int
+      - name: DrugID
+        type: int
+        description: "Drug ID - maps to d_medication"
+      - name: Offset
+        type: int
+        time_var: true
+      - name: OffsetDrugEnd
+        type: int
+        time_var: true
+      - name: IsSingleDose
+        type: int
+        description: "1 = single dose, 0 = continuous"
+      - name: Amount
+        type: float
+      - name: AmountPerMinute
+        type: float
+        description: "Rate for continuous infusions"
+
+  # Medication reference table
+  d_medication:
+    file: d_medication.csv.gz
+    description: "Reference table for drug IDs"
+    id_column: DrugID
+    columns:
+      - name: DrugID
+        type: int
+      - name: DrugName
+        type: string
+
+# DataID mappings for vitals (from ricu concept-dict)
+vital_id_map:
+  709: temp_c        # Temperature
+  711: heart_rate    # Heart Rate
+  700: sbp           # Systolic BP (invasive)
+  703: sbp           # Systolic BP (non-invasive)
+  702: dbp           # Diastolic BP (invasive)
+  705: dbp           # Diastolic BP (non-invasive)
+  701: map           # MAP (invasive)
+  704: map           # MAP (non-invasive)
+  708: spo2          # SpO2
+  710: respiratory_rate  # Respiratory Rate
+
+# LaboratoryID mappings (from ricu concept-dict)
+lab_id_map:
+  287: albumin
+  609: alkaline_phosphatase
+  617: alt
+  616: ast
+  174: basophils_percent
+  451: bicarbonate
+  456: bicarbonate
+  666: bicarbonate
+  667: bicarbonate
+  333: bilirubin_total
+  332: bilirubin_conjugated
+  355: bun
+  457: calcium_total
+  655: calcium_ionized
+  683: chloride
+  450: chloride
+  367: creatinine
+  668: pco2_arterial
+  465: ph_arterial
+  454: potassium
+  460: potassium
+  453: sodium
+  459: sodium

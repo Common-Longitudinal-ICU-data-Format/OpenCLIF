@@ -1,0 +1,414 @@
+# AmsterdamUMCdb - Amsterdam University Medical Centers Database
+# Source: https://amsterdammedicaldatascience.nl/amsterdamumcdb/
+# Time: Relative milliseconds from admission
+
+name: aumc
+display_name: "Amsterdam UMC Database"
+version: "1.0.2"
+source_url: "https://github.com/AmsterdamUMC/AmsterdamUMCdb"
+file_format: csv  # CSV files (some sites have parquet)
+
+# Time configuration
+time:
+  type: relative
+  unit: milliseconds  # Times are in ms from admission
+  start_point: "2020-01-01T08:00:00Z"
+
+# ID configuration
+ids:
+  patient_id: patientid
+  encounter_id: admissionid
+  encounter_table: admissions
+
+# Tables
+tables:
+  # Admission information
+  admissions:
+    file: admissions.csv
+    description: "Admission-level information"
+    id_column: admissionid
+    columns:
+      - name: admissionid
+        type: int
+        description: "ICU admission ID (primary key)"
+      - name: patientid
+        type: int
+        description: "Patient ID"
+      - name: admittedat
+        type: int
+        time_var: true
+        description: "Admission time (always 0)"
+      - name: dischargedat
+        type: int
+        time_var: true
+        description: "Discharge time in ms"
+      - name: dateofdeath
+        type: int
+        time_var: true
+        description: "Time of death (null if survived)"
+      - name: admissionyeargroup
+        type: string
+        description: "Year of admission (grouped)"
+      - name: agegroup
+        type: string
+        description: "Age group"
+      - name: gender
+        type: string
+        description: "Man/Vrouw"
+      - name: origin
+        type: string
+      - name: location
+        type: string
+        description: "ICU location"
+      - name: specialty
+        type: string
+      - name: destination
+        type: string
+      - name: dischargedat
+        type: int
+        time_var: true
+      - name: lengthofstay
+        type: int
+        description: "Length of stay in ms"
+      - name: heightgroup
+        type: string
+        clif_category: height_cm
+        description: "Height group"
+      - name: weightgroup
+        type: string
+        clif_category: weight_kg
+        description: "Weight group"
+
+  # Numeric items (vitals, labs, measurements)
+  numericitems:
+    file: numericitems.csv
+    description: "Numeric observations (vitals, labs, other measurements)"
+    id_column: admissionid
+    time_column: measuredat
+    value_column: value
+    category_column: itemid
+    category_type: int
+    columns:
+      - name: admissionid
+        type: int
+      - name: itemid
+        type: int
+        description: "Item ID - maps to listitems/freetextitems"
+      - name: item
+        type: string
+        description: "Item name"
+      - name: value
+        type: float
+      - name: valueid
+        type: int
+      - name: measuredat
+        type: int
+        time_var: true
+        description: "Time in ms from admission"
+      - name: registeredat
+        type: int
+        time_var: true
+      - name: registeredby
+        type: string
+      - name: updatedby
+        type: string
+      - name: updatedat
+        type: int
+        time_var: true
+      - name: islabresult
+        type: bool
+        description: "True if this is a lab result"
+      - name: fluidout
+        type: float
+      - name: unitid
+        type: int
+      - name: unit
+        type: string
+        description: "Unit of measurement"
+      - name: tag
+        type: string
+        description: "Additional context (e.g., arterial/venous)"
+
+  # Drug items (medications)
+  drugitems:
+    file: drugitems.csv
+    description: "Medication administrations"
+    id_column: admissionid
+    time_column: start
+    category_column: itemid
+    category_type: int
+    columns:
+      - name: admissionid
+        type: int
+      - name: orderid
+        type: int
+        description: "Groups related administrations"
+      - name: ordercategoryid
+        type: int
+      - name: ordercategory
+        type: string
+      - name: itemid
+        type: int
+        description: "Drug item ID"
+      - name: item
+        type: string
+        description: "Drug name"
+      - name: isadditive
+        type: bool
+      - name: isconditional
+        type: bool
+      - name: rate
+        type: float
+        description: "Infusion rate"
+      - name: rateunit
+        type: string
+      - name: rateunitid
+        type: int
+      - name: ratetimeunitid
+        type: int
+      - name: doserateperkg
+        type: bool
+        description: "True if rate is per kg body weight"
+      - name: dose
+        type: float
+      - name: doseunit
+        type: string
+      - name: doserateunit
+        type: string
+      - name: doseunitid
+        type: int
+      - name: doserateunitid
+        type: int
+      - name: administered
+        type: float
+        description: "Amount administered"
+      - name: administeredunit
+        type: string
+      - name: administeredunitid
+        type: int
+      - name: fluidin
+        type: float
+        description: "Fluid volume"
+      - name: start
+        type: int
+        time_var: true
+        description: "Start time in ms"
+      - name: stop
+        type: int
+        time_var: true
+        description: "Stop time in ms"
+      - name: duration
+        type: int
+        description: "Duration in ms"
+      - name: solutionitemid
+        type: int
+      - name: solutionitem
+        type: string
+      - name: solutionadministered
+        type: float
+      - name: solutionadministeredunit
+        type: string
+
+  # Process items (procedures)
+  processitems:
+    file: processitems.csv
+    description: "Procedures and process items"
+    id_column: admissionid
+    time_column: start
+    columns:
+      - name: admissionid
+        type: int
+      - name: itemid
+        type: int
+      - name: item
+        type: string
+      - name: start
+        type: int
+        time_var: true
+      - name: stop
+        type: int
+        time_var: true
+      - name: duration
+        type: int
+
+  # List items (categorical values)
+  listitems:
+    file: listitems.csv
+    description: "Categorical observations"
+    id_column: admissionid
+    time_column: measuredat
+    columns:
+      - name: admissionid
+        type: int
+      - name: itemid
+        type: int
+      - name: item
+        type: string
+      - name: valueid
+        type: int
+      - name: value
+        type: string
+      - name: measuredat
+        type: int
+        time_var: true
+      - name: registeredat
+        type: int
+        time_var: true
+
+  # Free text items
+  freetextitems:
+    file: freetextitems.csv
+    description: "Free text observations"
+    id_column: admissionid
+    time_column: measuredat
+    columns:
+      - name: admissionid
+        type: int
+      - name: itemid
+        type: int
+      - name: item
+        type: string
+      - name: value
+        type: string
+      - name: comment
+        type: string
+      - name: measuredat
+        type: int
+        time_var: true
+      - name: registeredat
+        type: int
+        time_var: true
+
+  # Procedure orders
+  procedureorderitems:
+    file: procedureorderitems.csv
+    description: "Procedure orders"
+    id_column: admissionid
+    time_column: registeredat
+    columns:
+      - name: admissionid
+        type: int
+      - name: orderid
+        type: int
+      - name: ordercategoryid
+        type: int
+      - name: ordercategoryname
+        type: string
+      - name: itemid
+        type: int
+      - name: item
+        type: string
+      - name: registeredat
+        type: int
+        time_var: true
+      - name: registeredby
+        type: string
+
+# Item ID mappings for vitals (from ricu concept-dict)
+vital_id_map:
+  8658: temp_c      # Temperature
+  13952: temp_c
+  16110: temp_c
+  6640: heart_rate  # Heart rate
+  6641: sbp         # Systolic BP
+  6643: dbp         # Diastolic BP
+  6642: map         # MAP
+  6709: spo2        # SpO2
+  8903: spo2
+  8874: respiratory_rate
+  12266: respiratory_rate
+
+# Item ID mappings for labs (from ricu concept-dict)
+lab_id_map:
+  6801: albumin
+  9937: albumin
+  6803: alkaline_phosphatase
+  11984: alkaline_phosphatase
+  6800: alt
+  11978: alt
+  6806: ast
+  11990: ast
+  11710: basophils_percent
+  14256: basophils_percent
+  6810: bicarbonate
+  9992: bicarbonate
+  6813: bilirubin_total
+  9945: bilirubin_total
+  6812: bilirubin_conjugated
+  6850: bun
+  9943: bun
+  6817: calcium_total
+  9933: calcium_total
+  6815: calcium_ionized
+  8915: calcium_ionized
+  9560: calcium_ionized
+  9561: calcium_ionized
+  10267: calcium_ionized
+  9930: chloride
+  6836: creatinine
+  9941: creatinine
+  14216: creatinine
+  6825: crp
+  10079: crp
+  6773: eosinophils_percent
+  9967: eosinophils_percent
+  6808: esr
+  11902: esr
+  6833: glucose_serum
+  9557: glucose_serum
+  9947: glucose_serum
+  6778: hemoglobin
+  9553: hemoglobin
+  9960: hemoglobin
+  10286: hemoglobin
+  19703: hemoglobin
+  11893: inr
+  6837: lactate
+  9580: lactate
+  10053: lactate
+  11846: lymphocytes_percent
+  14258: lymphocytes_percent
+  6839: magnesium
+  9952: magnesium
+  6786: neutrophils_percent
+  11856: neutrophils_percent
+  14254: neutrophils_percent
+  6846: pco2_arterial
+  9990: pco2_arterial
+  21213: pco2_arterial
+  7433: po2_arterial
+  9996: po2_arterial
+  21214: po2_arterial
+  6848: ph_arterial
+  12310: ph_arterial
+  6828: phosphate
+  9935: phosphate
+  6797: platelet_count
+  9964: platelet_count
+  10409: platelet_count
+  14252: platelet_count
+  6835: potassium
+  9556: potassium
+  9927: potassium
+  10285: potassium
+  6789: pt
+  17982: ptt
+  12311: so2_arterial
+  6840: sodium
+  9555: sodium
+  9924: sodium
+  10284: sodium
+  10407: troponin_t
+  6779: wbc
+  9965: wbc
+
+# Drug item ID mappings for medications
+med_id_map:
+  7229: norepinephrine
+  6818: epinephrine
+  12467: vasopressin
+  7179: dopamine
+  7178: dobutamine
+  7624: insulin
+  9014: insulin
+  19129: insulin

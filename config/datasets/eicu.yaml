@@ -1,0 +1,400 @@
+# eICU Collaborative Research Database
+# Source: https://physionet.org/content/eicu-crd/
+# Time: Relative minutes from ICU admission
+
+name: eicu
+display_name: "eICU Collaborative Research Database"
+version: "2.0"
+source_url: "https://physionet.org/content/eicu-crd/2.0"
+file_format: csv.gz  # gzipped CSV files
+
+# Time configuration
+time:
+  type: relative  # relative | absolute
+  unit: minutes   # minutes | seconds | milliseconds
+  start_point: "2020-01-01T08:00:00Z"  # Default anchor for synthetic datetime
+
+# ID configuration
+ids:
+  patient_id: patienthealthsystemstayid
+  encounter_id: patientunitstayid
+  encounter_table: patient
+
+# Tables
+tables:
+  # Demographics / Admission
+  patient:
+    file: patient.csv.gz
+    description: "Patient demographics and admission info"
+    id_column: patientunitstayid
+    columns:
+      - name: patientunitstayid
+        type: int
+        description: "ICU stay ID (primary key)"
+      - name: patienthealthsystemstayid
+        type: int
+        description: "Hospital stay ID"
+      - name: gender
+        type: string
+      - name: age
+        type: string
+        description: "Age ('>89' for patients over 89)"
+      - name: ethnicity
+        type: string
+      - name: hospitalid
+        type: int
+      - name: wardid
+        type: int
+      - name: admissionheight
+        type: float
+        clif_category: height_cm
+      - name: admissionweight
+        type: float
+        clif_category: weight_kg
+      - name: hospitaladmitoffset
+        type: int
+        time_var: true
+      - name: hospitaldischargeoffset
+        type: int
+        time_var: true
+      - name: unitadmitoffset
+        type: int
+        time_var: true
+        description: "Always 0 (reference point)"
+      - name: unitdischargeoffset
+        type: int
+        time_var: true
+      - name: hospitaldischargestatus
+        type: string
+        description: "Alive, Expired"
+      - name: unitdischargestatus
+        type: string
+
+  # Vitals - Periodic (high frequency)
+  vitalperiodic:
+    file: vitalPeriodic.csv.gz
+    description: "Periodic vital signs (5-min intervals)"
+    id_column: patientunitstayid
+    time_column: observationoffset
+    columns:
+      - name: vitalperiodicid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: observationoffset
+        type: int
+        time_var: true
+      - name: temperature
+        type: float
+        clif_category: temp_c
+        unit: celsius
+      - name: sao2
+        type: int
+        clif_category: spo2
+        unit: percent
+      - name: heartrate
+        type: int
+        clif_category: heart_rate
+        unit: bpm
+      - name: respiration
+        type: int
+        clif_category: respiratory_rate
+        unit: breaths/min
+      - name: cvp
+        type: int
+        unit: mmHg
+      - name: etco2
+        type: int
+        unit: mmHg
+      - name: systemicsystolic
+        type: int
+        clif_category: sbp
+        unit: mmHg
+      - name: systemicdiastolic
+        type: int
+        clif_category: dbp
+        unit: mmHg
+      - name: systemicmean
+        type: int
+        clif_category: map
+        unit: mmHg
+
+  # Vitals - Aperiodic (non-invasive BP, etc.)
+  vitalaperiodic:
+    file: vitalAperiodic.csv.gz
+    description: "Aperiodic vital signs"
+    id_column: patientunitstayid
+    time_column: observationoffset
+    columns:
+      - name: vitalaperiodicid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: observationoffset
+        type: int
+        time_var: true
+      - name: noninvasivesystolic
+        type: float
+        clif_category: sbp
+      - name: noninvasivediastolic
+        type: float
+        clif_category: dbp
+      - name: noninvasivemean
+        type: float
+        clif_category: map
+      - name: cardiacoutput
+        type: float
+      - name: paop
+        type: float
+
+  # Laboratory
+  lab:
+    file: lab.csv.gz
+    description: "Laboratory results"
+    id_column: patientunitstayid
+    time_column: labresultoffset
+    value_column: labresult
+    category_column: labname
+    category_type: string  # Values are string names, not IDs
+    columns:
+      - name: labid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: labresultoffset
+        type: int
+        time_var: true
+      - name: labtypeid
+        type: float
+      - name: labname
+        type: string
+        description: "Lab test name (e.g., 'creatinine', 'albumin')"
+      - name: labresult
+        type: float
+      - name: labresulttext
+        type: string
+      - name: labmeasurenamesystem
+        type: string
+      - name: labmeasurenameinterface
+        type: string
+        description: "Unit of measurement"
+
+  # Infusion medications (continuous)
+  infusiondrug:
+    file: infusionDrug.csv.gz
+    description: "Continuous IV infusions"
+    id_column: patientunitstayid
+    time_column: infusionoffset
+    category_column: drugname
+    category_type: string  # Uses regex patterns for matching
+    columns:
+      - name: infusiondrugid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: infusionoffset
+        type: int
+        time_var: true
+      - name: drugname
+        type: string
+      - name: drugrate
+        type: string
+      - name: infusionrate
+        type: string
+      - name: drugamount
+        type: string
+      - name: volumeoffluid
+        type: string
+      - name: patientweight
+        type: string
+
+  # Scheduled medications
+  medication:
+    file: medication.csv.gz
+    description: "Scheduled medications"
+    id_column: patientunitstayid
+    time_column: drugstartoffset
+    columns:
+      - name: medicationid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: drugorderoffset
+        type: int
+        time_var: true
+      - name: drugstartoffset
+        type: int
+        time_var: true
+      - name: drugstopoffset
+        type: int
+        time_var: true
+      - name: drugname
+        type: string
+      - name: dosage
+        type: string
+      - name: routeadmin
+        type: string
+      - name: frequency
+        type: string
+
+  # Respiratory care
+  respiratorycare:
+    file: respiratoryCare.csv.gz
+    description: "Respiratory support and ventilator settings"
+    id_column: patientunitstayid
+    time_column: respcarestatusoffset
+    columns:
+      - name: respcareid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: respcarestatusoffset
+        type: int
+        time_var: true
+      - name: airwaytype
+        type: string
+      - name: airwaysize
+        type: string
+      - name: ventstartoffset
+        type: int
+        time_var: true
+      - name: ventendoffset
+        type: int
+        time_var: true
+
+  # Respiratory charting (detailed vent settings)
+  respiratorycharting:
+    file: respiratoryCharting.csv.gz
+    description: "Detailed respiratory charting"
+    id_column: patientunitstayid
+    time_column: respchartoffset
+    columns:
+      - name: respchartid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: respchartoffset
+        type: int
+        time_var: true
+      - name: respcharttypecat
+        type: string
+      - name: respchartvaluelabel
+        type: string
+      - name: respchartvalue
+        type: string
+
+  # Intake/Output
+  intakeoutput:
+    file: intakeOutput.csv.gz
+    description: "Fluid intake and output"
+    id_column: patientunitstayid
+    time_column: intakeoutputoffset
+    columns:
+      - name: intakeoutputid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: intakeoutputoffset
+        type: int
+        time_var: true
+      - name: intaketotal
+        type: float
+      - name: outputtotal
+        type: float
+      - name: dialysistotal
+        type: float
+      - name: nettotal
+        type: float
+      - name: celllabel
+        type: string
+      - name: cellvaluenumeric
+        type: float
+
+  # Microbiology
+  microlab:
+    file: microLab.csv.gz
+    description: "Microbiology culture results"
+    id_column: patientunitstayid
+    time_column: culturetakenoffset
+    columns:
+      - name: microlabid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: culturetakenoffset
+        type: int
+        time_var: true
+      - name: culturesite
+        type: string
+      - name: organism
+        type: string
+      - name: antibiotic
+        type: string
+      - name: sensitivitylevel
+        type: string
+
+  # Diagnoses
+  diagnosis:
+    file: diagnosis.csv.gz
+    description: "Diagnoses"
+    id_column: patientunitstayid
+    time_column: diagnosisoffset
+    columns:
+      - name: diagnosisid
+        type: int
+      - name: patientunitstayid
+        type: int
+      - name: diagnosisoffset
+        type: int
+        time_var: true
+      - name: diagnosisstring
+        type: string
+      - name: icd9code
+        type: string
+      - name: diagnosispriority
+        type: string
+
+# Lab name mappings (eICU uses string names)
+lab_name_map:
+  albumin: albumin
+  creatinine: creatinine
+  "BUN": bun
+  potassium: potassium
+  sodium: sodium
+  chloride: chloride
+  bicarbonate: bicarbonate
+  glucose: glucose_serum
+  "Hgb": hemoglobin
+  "platelets x 1000": platelet_count
+  "WBC x 1000": wbc
+  lactate: lactate
+  "total bilirubin": bilirubin_total
+  "direct bilirubin": bilirubin_conjugated
+  "ALT (SGPT)": alt
+  "AST (SGOT)": ast
+  "alkaline phos.": alkaline_phosphatase
+  calcium: calcium_total
+  "ionized calcium": calcium_ionized
+  magnesium: magnesium
+  phosphate: phosphate
+  "PT - INR": inr
+  "PT": pt
+  "PTT": ptt
+  "pH": ph_arterial
+  "paO2": po2_arterial
+  "paCO2": pco2_arterial
+  "Base Excess": base_excess
+  "troponin - I": troponin_i
+  "troponin - T": troponin_t
+
+# Vital column mappings
+vital_column_map:
+  temperature: temp_c
+  heartrate: heart_rate
+  systemicsystolic: sbp
+  systemicdiastolic: dbp
+  systemicmean: map
+  sao2: spo2
+  respiration: respiratory_rate
+  admissionheight: height_cm
+  admissionweight: weight_kg
