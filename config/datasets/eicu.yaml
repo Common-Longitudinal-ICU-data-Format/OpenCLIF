@@ -354,8 +354,9 @@ tables:
       - name: diagnosispriority
         type: string
 
-# Lab name mappings (eICU uses string names)
+# Lab name → CLIF category mappings (eICU uses string lab names)
 lab_name_map:
+  # Basic Metabolic Panel
   albumin: albumin
   creatinine: creatinine
   "BUN": bun
@@ -364,37 +365,82 @@ lab_name_map:
   chloride: chloride
   bicarbonate: bicarbonate
   glucose: glucose_serum
+  "bedside glucose": glucose_fingerstick
+  calcium: calcium_total
+  "ionized calcium": calcium_ionized
+  magnesium: magnesium
+  phosphate: phosphate
+  
+  # CBC
   "Hgb": hemoglobin
+  "Hct": hematocrit
   "platelets x 1000": platelet_count
   "WBC x 1000": wbc
-  lactate: lactate
+  "-polys": neutrophils_percent
+  "-lymphs": lymphocytes_percent
+  "-monos": monocytes_percent
+  "-eos": eosinophils_percent
+  "-basos": basophils_percent
+  
+  # Liver Function
   "total bilirubin": bilirubin_total
   "direct bilirubin": bilirubin_conjugated
   "ALT (SGPT)": alt
   "AST (SGOT)": ast
   "alkaline phos.": alkaline_phosphatase
-  calcium: calcium_total
-  "ionized calcium": calcium_ionized
-  magnesium: magnesium
-  phosphate: phosphate
+  
+  # Coagulation
   "PT - INR": inr
   "PT": pt
   "PTT": ptt
+  
+  # Blood Gas
   "pH": ph_arterial
   "paO2": po2_arterial
   "paCO2": pco2_arterial
+  "FiO2": fio2
   "Base Excess": base_excess
+  "O2 Sat (%)": so2_arterial
+  
+  # Cardiac / Inflammatory
+  lactate: lactate
   "troponin - I": troponin_i
   "troponin - T": troponin_t
+  "CRP": crp
+  "procalcitonin": procalcitonin
 
-# Vital column mappings
+# Vital column → CLIF category mappings
 vital_column_map:
   temperature: temp_c
   heartrate: heart_rate
   systemicsystolic: sbp
   systemicdiastolic: dbp
   systemicmean: map
+  noninvasivesystolic: sbp
+  noninvasivediastolic: dbp
+  noninvasivemean: map
   sao2: spo2
   respiration: respiratory_rate
   admissionheight: height_cm
   admissionweight: weight_kg
+  cvp: cvp
+  etco2: etco2
+
+# Medication name patterns → CLIF category (regex patterns)
+med_name_patterns:
+  norepinephrine: "^norepinephrine|^levophed"
+  epinephrine: "^epinephrine|^adrenalin"
+  vasopressin: "^vasopressin"
+  dopamine: "^dopamine"
+  dobutamine: "^dobutamine"
+  phenylephrine: "^phenylephrine|^neosynephrine"
+  milrinone: "^milrinone"
+  propofol: "^propofol|^diprivan"
+  dexmedetomidine: "^dexmedetomidine|^precedex"
+  midazolam: "^midazolam|^versed"
+  fentanyl: "^fentanyl"
+  morphine: "^morphine"
+  ketamine: "^ketamine"
+  insulin: "^insulin"
+  heparin: "^heparin"
+  furosemide: "^furosemide|^lasix"

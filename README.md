@@ -128,11 +128,13 @@ hr_data <- load_concepts("hr", "sic")
 ## Sources & Attribution
 
 - **CLIF mCIDE definitions**: [Common-Longitudinal-ICU-data-Format/skills](https://github.com/Common-Longitudinal-ICU-data-Format/skills/tree/main/skills/clif-icu/mCIDE)
-- **ricu concept mappings**: [eth-mds/ricu](https://github.com/eth-mds/ricu) - Bennett et al., "ricu: R's interface to intensive care data"
+- **Initial ID mappings reference**: ricu concept-dict.json ([eth-mds/ricu](https://github.com/eth-mds/ricu)) - used as starting point, extended by OpenCLIF
 - **eICU-CRD**: Pollard et al., PhysioNet
 - **HiRID**: Hyland et al., PhysioNet
 - **AmsterdamUMCdb**: Thoral et al., Amsterdam UMC
 - **SICdb**: Salzburg ICU Database, PhysioNet
+
+> **Note:** OpenCLIF does not use ricu as a library dependency. The ricu concept-dict.json was used as a reference for initial mappings, but OpenCLIF maintains its own independent mapping configurations.
 
 ## Contributing
 

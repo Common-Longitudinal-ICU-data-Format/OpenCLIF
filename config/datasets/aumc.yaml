@@ -304,39 +304,39 @@ tables:
       - name: registeredby
         type: string
 
-# Item ID mappings for vitals (from ricu concept-dict)
+# itemid → CLIF category mappings for vitals
+# Source: numericitems table
 vital_id_map:
-  8658: temp_c      # Temperature
+  # Temperature
+  8658: temp_c
   13952: temp_c
   16110: temp_c
-  6640: heart_rate  # Heart rate
-  6641: sbp         # Systolic BP
-  6643: dbp         # Diastolic BP
-  6642: map         # MAP
-  6709: spo2        # SpO2
+  
+  # Hemodynamics
+  6640: heart_rate
+  6641: sbp
+  6643: dbp
+  6642: map
+  
+  # Oxygenation
+  6709: spo2
   8903: spo2
+  
+  # Respiratory
   8874: respiratory_rate
   12266: respiratory_rate
 
-# Item ID mappings for labs (from ricu concept-dict)
+# itemid → CLIF category mappings for labs
+# Source: numericitems table (filter: islabresult = true)
 lab_id_map:
+  # Chemistry
   6801: albumin
   9937: albumin
-  6803: alkaline_phosphatase
-  11984: alkaline_phosphatase
-  6800: alt
-  11978: alt
-  6806: ast
-  11990: ast
-  11710: basophils_percent
-  14256: basophils_percent
-  6810: bicarbonate
-  9992: bicarbonate
-  6813: bilirubin_total
-  9945: bilirubin_total
-  6812: bilirubin_conjugated
   6850: bun
   9943: bun
+  6836: creatinine
+  9941: creatinine
+  14216: creatinine
   6817: calcium_total
   9933: calcium_total
   6815: calcium_ionized
@@ -345,34 +345,62 @@ lab_id_map:
   9561: calcium_ionized
   10267: calcium_ionized
   9930: chloride
-  6836: creatinine
-  9941: creatinine
-  14216: creatinine
-  6825: crp
-  10079: crp
-  6773: eosinophils_percent
-  9967: eosinophils_percent
-  6808: esr
-  11902: esr
-  6833: glucose_serum
-  9557: glucose_serum
-  9947: glucose_serum
+  
+  # Electrolytes
+  6810: bicarbonate
+  9992: bicarbonate
+  6835: potassium
+  9556: potassium
+  9927: potassium
+  10285: potassium
+  6840: sodium
+  9555: sodium
+  9924: sodium
+  10284: sodium
+  6839: magnesium
+  9952: magnesium
+  6828: phosphate
+  9935: phosphate
+  
+  # Liver Function
+  6803: alkaline_phosphatase
+  11984: alkaline_phosphatase
+  6800: alt
+  11978: alt
+  6806: ast
+  11990: ast
+  6813: bilirubin_total
+  9945: bilirubin_total
+  6812: bilirubin_conjugated
+  
+  # Hematology
   6778: hemoglobin
   9553: hemoglobin
   9960: hemoglobin
   10286: hemoglobin
   19703: hemoglobin
-  11893: inr
-  6837: lactate
-  9580: lactate
-  10053: lactate
-  11846: lymphocytes_percent
-  14258: lymphocytes_percent
-  6839: magnesium
-  9952: magnesium
+  6797: platelet_count
+  9964: platelet_count
+  10409: platelet_count
+  14252: platelet_count
+  6779: wbc
+  9965: wbc
   6786: neutrophils_percent
   11856: neutrophils_percent
   14254: neutrophils_percent
+  11846: lymphocytes_percent
+  14258: lymphocytes_percent
+  11710: basophils_percent
+  14256: basophils_percent
+  6773: eosinophils_percent
+  9967: eosinophils_percent
+  
+  # Coagulation
+  11893: inr
+  6789: pt
+  17982: ptt
+  
+  # Blood Gas
   6846: pco2_arterial
   9990: pco2_arterial
   21213: pco2_arterial
@@ -381,34 +409,40 @@ lab_id_map:
   21214: po2_arterial
   6848: ph_arterial
   12310: ph_arterial
-  6828: phosphate
-  9935: phosphate
-  6797: platelet_count
-  9964: platelet_count
-  10409: platelet_count
-  14252: platelet_count
-  6835: potassium
-  9556: potassium
-  9927: potassium
-  10285: potassium
-  6789: pt
-  17982: ptt
   12311: so2_arterial
-  6840: sodium
-  9555: sodium
-  9924: sodium
-  10284: sodium
+  
+  # Inflammatory / Metabolic
+  6837: lactate
+  9580: lactate
+  10053: lactate
+  6825: crp
+  10079: crp
+  6808: esr
+  11902: esr
+  6833: glucose_serum
+  9557: glucose_serum
+  9947: glucose_serum
+  
+  # Cardiac
   10407: troponin_t
-  6779: wbc
-  9965: wbc
 
-# Drug item ID mappings for medications
+# itemid → CLIF category mappings for medications
+# Source: drugitems table
 med_id_map:
+  # Vasopressors
   7229: norepinephrine
   6818: epinephrine
   12467: vasopressin
   7179: dopamine
   7178: dobutamine
+  
+  # Insulin
   7624: insulin
   9014: insulin
   19129: insulin
+  
+  # TODO: Add more medications
+  # - Sedatives (propofol, midazolam, dexmedetomidine)
+  # - Opioids (fentanyl, morphine)
+  # - Paralytics (rocuronium, cisatracurium)
+  # - Anticoagulants (heparin)

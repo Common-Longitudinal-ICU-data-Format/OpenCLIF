@@ -189,41 +189,62 @@ tables:
       - name: DrugName
         type: string
 
-# DataID mappings for vitals (from ricu concept-dict)
+# DataID → CLIF category mappings for vitals
+# Source: data_float_h table, filtered by DataID
 vital_id_map:
-  709: temp_c        # Temperature
-  711: heart_rate    # Heart Rate
-  700: sbp           # Systolic BP (invasive)
-  703: sbp           # Systolic BP (non-invasive)
-  702: dbp           # Diastolic BP (invasive)
-  705: dbp           # Diastolic BP (non-invasive)
-  701: map           # MAP (invasive)
-  704: map           # MAP (non-invasive)
-  708: spo2          # SpO2
-  710: respiratory_rate  # Respiratory Rate
+  709: temp_c              # Temperature
+  711: heart_rate          # Heart Rate
+  700: sbp                 # Systolic BP (invasive)
+  703: sbp                 # Systolic BP (non-invasive)
+  702: dbp                 # Diastolic BP (invasive)
+  705: dbp                 # Diastolic BP (non-invasive)
+  701: map                 # MAP (invasive)
+  704: map                 # MAP (non-invasive)
+  708: spo2                # SpO2
+  710: respiratory_rate    # Respiratory Rate
+  # TODO: Add more from d_references table
 
-# LaboratoryID mappings (from ricu concept-dict)
+# LaboratoryID → CLIF category mappings
+# Source: laboratory table, filtered by LaboratoryID
 lab_id_map:
+  # Chemistry
   287: albumin
-  609: alkaline_phosphatase
-  617: alt
-  616: ast
-  174: basophils_percent
-  451: bicarbonate
-  456: bicarbonate
-  666: bicarbonate
-  667: bicarbonate
-  333: bilirubin_total
-  332: bilirubin_conjugated
   355: bun
+  367: creatinine
   457: calcium_total
   655: calcium_ionized
   683: chloride
   450: chloride
-  367: creatinine
-  668: pco2_arterial
-  465: ph_arterial
+  
+  # Electrolytes
+  451: bicarbonate
+  456: bicarbonate
+  666: bicarbonate
+  667: bicarbonate
   454: potassium
   460: potassium
   453: sodium
   459: sodium
+  
+  # Liver Function
+  609: alkaline_phosphatase
+  617: alt
+  616: ast
+  333: bilirubin_total
+  332: bilirubin_conjugated
+  
+  # Hematology
+  174: basophils_percent
+  
+  # Blood Gas
+  668: pco2_arterial
+  465: ph_arterial
+  # TODO: Add po2, lactate, etc.
+
+# DrugID → CLIF category mappings
+# Source: medication table, filtered by DrugID
+med_id_map:
+  # TODO: Map from d_medication reference table
+  # Vasopressors
+  # Sedatives
+  # Anticoagulants

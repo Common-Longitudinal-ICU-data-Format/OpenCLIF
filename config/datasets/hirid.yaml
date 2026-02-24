@@ -126,70 +126,97 @@ tables:
       - name: upperbound
         type: float
 
-# Variable ID mappings for vitals (from ricu concept-dict)
+# variableid → CLIF category mappings for vitals
+# Source: observations table, reference: hirid_variable_reference.csv
 vital_id_map:
-  410: temp_c     # Core Temp
-  400: temp_c     # Bladder Temp
-  7100: temp_c    # Skin Temp
+  # Temperature
+  410: temp_c       # Core Temp
+  400: temp_c       # Bladder Temp
+  7100: temp_c      # Skin Temp
+  
+  # Hemodynamics
   200: heart_rate
-  100: sbp        # Invasive systolic
-  120: dbp        # Invasive diastolic
-  110: map        # Invasive MAP
-  610: map        # MAP other
+  100: sbp          # Invasive systolic
+  120: dbp          # Invasive diastolic
+  110: map          # Invasive MAP
+  610: map          # MAP other
+  
+  # Oxygenation
   4000: spo2
   8280: spo2
+  
+  # Respiratory
   300: respiratory_rate
   310: respiratory_rate
+  
+  # Demographics
   10000450: height_cm
   10000400: weight_kg
 
-# Variable ID mappings for labs (from ricu concept-dict)
+# variableid → CLIF category mappings for labs
+# Source: observations table (labs also stored here)
 lab_id_map:
+  # Chemistry
   24000605: albumin
-  20002700: alkaline_phosphatase
-  20002600: alt
-  24000330: ast
-  20004200: bicarbonate
-  20004300: bilirubin_total
-  24000560: bilirubin_conjugated
   20004100: bun
+  20000600: creatinine
   20005100: calcium_total
   24000522: calcium_ionized
   24000439: chloride
   24000521: chloride
-  20000600: creatinine
-  20002200: crp
-  24000668: esr
-  20005110: glucose_serum
-  24000523: glucose_serum
-  24000585: glucose_serum
-  24000548: hemoglobin
-  24000836: hemoglobin
-  20000900: hemoglobin
-  24000567: inr
-  24000524: lactate
-  24000480: lymphocytes_percent
-  24000230: magnesium
-  24000550: neutrophils_percent
-  20001200: pco2_arterial
-  20000200: po2_arterial
-  20000300: ph_arterial
-  20000110: platelet_count
+  
+  # Electrolytes
+  20004200: bicarbonate
   20000500: potassium
   24000520: potassium
   24000833: potassium
   24000867: potassium
-  20004410: ptt
-  20000800: so2_arterial
   20000400: sodium
   24000519: sodium
   24000658: sodium
   24000835: sodium
   24000866: sodium
-  24000806: troponin_t
+  24000230: magnesium
+  
+  # Liver Function
+  20002700: alkaline_phosphatase
+  20002600: alt
+  24000330: ast
+  20004300: bilirubin_total
+  24000560: bilirubin_conjugated
+  
+  # Hematology
+  24000548: hemoglobin
+  24000836: hemoglobin
+  20000900: hemoglobin
+  20000110: platelet_count
   20000700: wbc
+  24000480: lymphocytes_percent
+  24000550: neutrophils_percent
+  
+  # Coagulation
+  24000567: inr
+  20004410: ptt
+  
+  # Blood Gas
+  20001200: pco2_arterial
+  20000200: po2_arterial
+  20000300: ph_arterial
+  20000800: so2_arterial
+  
+  # Inflammatory / Metabolic
+  24000524: lactate
+  20002200: crp
+  24000668: esr
+  20005110: glucose_serum
+  24000523: glucose_serum
+  24000585: glucose_serum
+  
+  # Cardiac
+  24000806: troponin_t
 
-# Pharma ID mappings for medications
+# pharmaid → CLIF category mappings for medications
+# Source: pharma table
 med_id_map:
   # Vasopressors
   1000462: norepinephrine
@@ -204,6 +231,10 @@ med_id_map:
   112: vasopressin
   113: vasopressin
   426: dobutamine
-  # Sedation
+  
+  # Insulin
   15: insulin
   1000724: insulin
+  
+  # TODO: Add sedatives, paralytics, anticoagulants
+  # Reference: pharma table unique pharmaid values
