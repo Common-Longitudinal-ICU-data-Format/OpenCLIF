@@ -11,7 +11,7 @@ The [Common Longitudinal ICU Data Format (CLIF)](https://github.com/Common-Longi
 OpenCLIF solves this by:
 1. Taking CLIF's mCIDE category definitions
 2. Adding mappings from the [ricu](https://github.com/eth-mds/ricu) package's concept dictionary
-3. Providing ready-to-use identifiers for 5 major open ICU datasets
+3. Providing ready-to-use identifiers for 4 major open ICU datasets
 
 ## Supported Datasets
 
@@ -39,8 +39,8 @@ Each CSV file in the `mappings/` directory contains:
 
 ### ID Format Notes
 
-- **Numeric IDs**: Direct item IDs (e.g., `220045` for heart rate in MIMIC-IV)
-- **Multiple IDs**: Separated by semicolons (e.g., `220050; 220179`)
+- **Numeric IDs**: Direct item IDs (e.g., `711` for heart rate in SICdb)
+- **Multiple IDs**: Separated by semicolons (e.g., `700; 703`)
 - **Regex patterns**: Prefixed with `regex:` (e.g., `regex:^norepi`)
 - **Column references**: Prefixed with `col:` (e.g., `col:heartrate`)
 - **Empty values**: No mapping available in ricu for that dataset
@@ -66,7 +66,7 @@ OpenCLIF/
 
 ## Usage Examples
 
-### Python - Extract heart rate from eICU
+### Python - Extract heart rate from SICdb
 
 ```python
 import pandas as pd
@@ -74,40 +74,16 @@ import pandas as pd
 # Load mappings
 vitals = pd.read_csv('mappings/vitals/clif_vitals_categories.csv')
 
-# Get eICU mapping for heart rate
+# Get SICdb item IDs for heart rate
 hr_row = vitals[vitals['vital_category'] == 'heart_rate']
-eicu_col = hr_row['eicu_ids'].values[0]
-# Returns: 'col:heartrate' (column name in vitalperiodic table)
-
-# Extract column name
-col_name = eicu_col.replace('col:', '')
-
-# Use in query
-query = f"""
-SELECT patientunitstayid, observationoffset, {col_name}
-FROM vitalperiodic
-WHERE {col_name} IS NOT NULL
-"""
-```
-
-### Python - Extract norepinephrine from SICdb
-
-```python
-import pandas as pd
-
-# Load mappings  
-meds = pd.read_csv('mappings/medications/clif_medication_categories.csv')
-
-# Get SICdb DrugID for norepinephrine
-norepi_row = meds[meds['med_category'] == 'norepinephrine']
-sic_id = norepi_row['sic_ids'].values[0]
-# Returns: '1562'
+sic_ids = hr_row['sic_ids'].values[0]
+# Returns: '711'
 
 # Use in query
 query = f"""
 SELECT *
-FROM medication
-WHERE DrugID = {sic_id}
+FROM data_float_h
+WHERE DataID = {sic_ids}
 """
 ```
 
@@ -125,7 +101,7 @@ hr_concept <- vitals$ricu_concept[vitals$vital_category == "heart_rate"]
 # Returns: "hr"
 
 # Load using ricu
-hr_data <- load_concepts("hr", "miiv")
+hr_data <- load_concepts("hr", "sic")
 ```
 
 ## Mapping Coverage
@@ -135,12 +111,12 @@ hr_data <- load_concepts("hr", "miiv")
 - Full coverage: temp, heart_rate, sbp, dbp, spo2, respiratory_rate, map, height, weight
 
 ### Labs (55 categories)  
-- ✅ 35 categories mapped (~64%)
+- ✅ ~35 categories mapped (~64%)
 - Well covered: basic metabolic panel, liver function tests, CBC, coagulation
 - Gaps: Some differential counts (absolute values), specialized markers
 
 ### Medications (50 categories)
-- ✅ 8 categories mapped (~16%)
+- ✅ ~8 categories mapped (~16%)
 - Well covered: vasopressors (norepinephrine, epinephrine, vasopressin, dopamine, dobutamine, phenylephrine), insulin
 - Gaps: Most sedatives, anticoagulants, paralytics (not tracked by rate in ricu)
 
@@ -156,7 +132,7 @@ hr_data <- load_concepts("hr", "miiv")
 - **eICU-CRD**: Pollard et al., PhysioNet
 - **HiRID**: Hyland et al., PhysioNet
 - **AmsterdamUMCdb**: Thoral et al., Amsterdam UMC
-- **SICdb**: Salzburg Intensive Care Database, PhysioNet
+- **SICdb**: Salzburg ICU Database, PhysioNet
 
 ## Contributing
 
@@ -165,7 +141,7 @@ Contributions are welcome! Areas that need work:
 1. **Adding missing mappings** - Especially for sedatives, paralytics, and respiratory devices
 2. **Validation** - Verifying mappings against actual dataset schemas
 3. **Unit conversions** - Documenting unit differences between datasets
-4. **Additional datasets** - SICdb, other open ICU databases
+4. **Additional datasets** - MIMIC-IV, other open ICU databases
 
 ## License
 
@@ -174,9 +150,9 @@ This project is part of the CLIF consortium. Mappings derived from ricu are subj
 ## Related Projects
 
 - [CLIF](https://github.com/Common-Longitudinal-ICU-data-Format/CLIF) - Core CLIF specification
-- [CLIFpy](https://github.com/Common-Longitudinal-ICU-data-Format/clif-consortia/CLIFpy) - Python tools for CLIF
+- [CLIFpy](https://github.com/Common-Longitudinal-ICU-data-Format/clifpy) - Python tools for CLIF
 - [ricu](https://github.com/eth-mds/ricu) - R interface for intensive care data
-- [MIMIC Code Repository](https://github.com/MIT-LCP/mimic-code) - Official MIMIC analysis code
+- [CLIF-MIMIC](https://github.com/Common-Longitudinal-ICU-data-Format/CLIF-MIMIC) - MIMIC to CLIF ETL
 
 ---
 
