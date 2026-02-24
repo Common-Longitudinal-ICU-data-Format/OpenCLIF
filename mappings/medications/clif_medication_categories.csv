@@ -1,14 +1,14 @@
-med_category,description,med_name_examples,med_group,ricu_concept,mimic_iii_itemid,mimic_iv_itemid,eicu_ids,hirid_ids,aumc_ids
-norepinephrine,Catecholamine for hemodynamic support,"NOREPINEPHRINE 16 MG/250 ML IV INFUSION, NOREPINEPHRINE 0.01-3 MCG/KG/MIN IV",vasoactives,norepi_rate,"30047; 30120; 221906",221906,regex:^norepi,"1000462; 1000656; 1000657; 1000658",7229
-epinephrine,Catecholamine for hemodynamic support and/or anaphylaxis,"EPINEPHRINE 4 MG/250 ML IV INFUSION, EPINEPHRINE 0.01-0.5 MCG/KG/MIN IV",vasoactives,epi_rate,"30044; 30119; 30309; 221289",221289,regex:^epi( |n),"71; 1000649; 1000650; 1000655; 1000750",6818
-vasopressin,Antidiuretic hormone for septic shock,"VASOPRESSIN 20 UNITS/100 ML IV INFUSION, VASOPRESSIN 0.01-0.04 UNITS/MIN IV",vasoactives,adh_rate,"30051; 222315",222315,regex:^vasopressin,"112; 113",12467
-dopamine,Vasopressor and inotrope for hemodynamic support,"DOPAMINE 400 MG/250 ML IV INFUSION, DOPAMINE 5-20 MCG/KG/MIN IV",vasoactives,dopa_rate,"30043; 30125; 30307; 221662",221662,regex:^dopa,,7179
-dobutamine,Inotropic agent to increase cardiac contractility,"DOBUTAMINE 500 MG/250 ML IV INFUSION, DOBUTAMINE 2-20 MCG/KG/MIN IV",vasoactives,dobu_rate,"30042; 30306; 221653",221653,regex:^dobu,426,7178
-phenylephrine,Alpha-1 agonist vasopressor,"PHENYLEPHRINE 200 MG/250 ML IV INFUSION, PHENYLEPHRINE 0.5-3 MCG/KG/MIN IV",vasoactives,phn_rate,"30127; 30128; 221749",221749,regex:^phenylephrine,,
+med_category,description,med_name_examples,med_group,ricu_concept,eicu_ids,hirid_ids,aumc_ids,sic_ids
+norepinephrine,Catecholamine for hemodynamic support,"NOREPINEPHRINE 16 MG/250 ML IV INFUSION, NOREPINEPHRINE 0.01-3 MCG/KG/MIN IV",vasoactives,norepi_rate,regex:^norepi,"1000462; 1000656; 1000657; 1000658",7229,
+epinephrine,Catecholamine for hemodynamic support and/or anaphylaxis,"EPINEPHRINE 4 MG/250 ML IV INFUSION, EPINEPHRINE 0.01-0.5 MCG/KG/MIN IV",vasoactives,epi_rate,regex:^epi( |n),"71; 1000649; 1000650; 1000655; 1000750",6818,
+vasopressin,Antidiuretic hormone for septic shock,"VASOPRESSIN 20 UNITS/100 ML IV INFUSION, VASOPRESSIN 0.01-0.04 UNITS/MIN IV",vasoactives,adh_rate,regex:^vasopressin,"112; 113",12467,
+dopamine,Vasopressor and inotrope for hemodynamic support,"DOPAMINE 400 MG/250 ML IV INFUSION, DOPAMINE 5-20 MCG/KG/MIN IV",vasoactives,dopa_rate,regex:^dopa,,7179,
+dobutamine,Inotropic agent to increase cardiac contractility,"DOBUTAMINE 500 MG/250 ML IV INFUSION, DOBUTAMINE 2-20 MCG/KG/MIN IV",vasoactives,dobu_rate,regex:^dobu,426,7178,
+phenylephrine,Alpha-1 agonist vasopressor,"PHENYLEPHRINE 200 MG/250 ML IV INFUSION, PHENYLEPHRINE 0.5-3 MCG/KG/MIN IV",vasoactives,phn_rate,regex:^phenylephrine,,
 milrinone,Phosphodiesterase inhibitor inotrope,"MILRINONE 40 MG/200 ML IV INFUSION, MILRINONE 0.375-0.75 MCG/KG/MIN IV",vasoactives,,,,,
 angiotensin,Vasopressor for refractory hypotension,"ANGIOTENSIN II 2.5 MG/10 ML IV INFUSION, ANGIOTENSIN 20 NG/KG/MIN IV",vasoactives,,,,,
 isoproterenol,Beta agonist to increase heart rate,"ISOPROTERENOL 1 MG/250 ML IV INFUSION, ISOPROTERENOL 0.02-0.1 MCG/KG/MIN IV",vasoactives,,,,,
-insulin,Hormone for glucose management,"INSULIN REGULAR 100 UNITS/100 ML IV INFUSION, INSULIN 1-10 UNITS/HR IV",endocrine,ins,"30045; 30100; 223258; 223260","223258; 223260","regex:^insulin (250.+)?\\((ml|units)/hr)?\\)$","15; 1000724","7624; 9014; 19129"
+insulin,Hormone for glucose management,"INSULIN REGULAR 100 UNITS/100 ML IV INFUSION, INSULIN 1-10 UNITS/HR IV",endocrine,ins,"regex:^insulin (250.+)?\\((ml|units)/hr)?\\)$","15; 1000724","7624; 9014; 19129",
 propofol,Sedative-hypnotic for anesthesia and sedation,"PROPOFOL 1000 MG/100 ML IV INFUSION, PROPOFOL 5-50 MCG/KG/MIN IV",sedation,,,,,
 dexmedetomidine,Alpha-2 agonist sedative,"DEXMEDETOMIDINE 200 MCG/50 ML IV INFUSION, DEXMEDETOMIDINE 0.2-1.5 MCG/KG/HR IV",sedation,,,,,
 midazolam,Benzodiazepine for anxiety and sedation,"MIDAZOLAM 100 MG/100 ML IV INFUSION, MIDAZOLAM 1-10 MG/HR IV",sedation,,,,,
@@ -42,5 +42,5 @@ nitric_oxide,Inhaled pulmonary vasodilator,"NITRIC OXIDE 20 PPM INHALED CONTINUO
 sodium_chloride,Isotonic saline for fluid replacement,"SODIUM CHLORIDE 0.9% 1000 ML IV MAINTENANCE, NORMAL SALINE 500 ML IV BOLUS",fluids_electrolytes,,,,,
 lactated_ringers,Balanced crystalloid for fluid resuscitation,"LACTATED RINGERS 1000 ML IV BOLUS, LR 500 ML IV AT 200 ML/HR",fluids_electrolytes,,,,,
 albumin,Colloid fluid replacement for volume expansion and hypoalbuminemia,"ALBUMIN 5% 250 ML IV INFUSION, ALBUMIN 25% 50 ML IV INFUSION",fluids_electrolytes,,,,,
-dextrose_5_water,"Dextrose 5% concentration, glucose solution for fluid replacement","D5W 1000 ML IV MAINTENANCE, DEXTROSE 5% IN WATER 500 ML IV AT 125 ML/HR",fluids_electrolytes,dex,,"220950; 228140; 220952","regex:(d10|dextrose.+10 ?%).+ml/hr","1000022; 1000690; 1000689; 1000544; 1000746; 1000835; 1000060; 1000545; 1000567","7254; 7255; 7256; 8940; 9571"
-dextrose_10_water,"Dextrose 10% concentration, glucose solution for fluid replacement","D10W 1000 ML IV MAINTENANCE, DEXTROSE 10% 1000 ML IV MAINTENANCE",fluids_electrolytes,dex,,"220950; 228140; 220952","regex:(d10|dextrose.+10 ?%).+ml/hr","1000022; 1000690; 1000689; 1000544; 1000746; 1000835; 1000060; 1000545; 1000567","7254; 7255; 7256; 8940; 9571"
+dextrose_5_water,"Dextrose 5% concentration, glucose solution for fluid replacement","D5W 1000 ML IV MAINTENANCE, DEXTROSE 5% IN WATER 500 ML IV AT 125 ML/HR",fluids_electrolytes,dex,"regex:(d10|dextrose.+10 ?%).+ml/hr","1000022; 1000690; 1000689; 1000544; 1000746; 1000835; 1000060; 1000545; 1000567","7254; 7255; 7256; 8940; 9571",
+dextrose_10_water,"Dextrose 10% concentration, glucose solution for fluid replacement","D10W 1000 ML IV MAINTENANCE, DEXTROSE 10% 1000 ML IV MAINTENANCE",fluids_electrolytes,dex,"regex:(d10|dextrose.+10 ?%).+ml/hr","1000022; 1000690; 1000689; 1000544; 1000746; 1000835; 1000060; 1000545; 1000567","7254; 7255; 7256; 8940; 9571",

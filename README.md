@@ -17,11 +17,10 @@ OpenCLIF solves this by:
 
 | Dataset | Source | Access |
 |---------|--------|--------|
-| **MIMIC-III** | Beth Israel Deaconess Medical Center | [PhysioNet](https://physionet.org/content/mimiciii/) |
-| **MIMIC-IV** | Beth Israel Deaconess Medical Center | [PhysioNet](https://physionet.org/content/mimiciv/) |
 | **eICU-CRD** | Philips eICU Research Institute | [PhysioNet](https://physionet.org/content/eicu-crd/) |
 | **HiRID** | Bern University Hospital | [PhysioNet](https://physionet.org/content/hirid/) |
 | **AmsterdamUMCdb** | Amsterdam UMC | [AmsterdamMedicalDataScience](https://amsterdammedicaldatascience.nl/amsterdamumcdb/) |
+| **SICdb** | Salzburg University Hospital | [PhysioNet](https://physionet.org/content/sicdb/) |
 
 ## Mapping Structure
 
@@ -33,11 +32,10 @@ Each CSV file in the `mappings/` directory contains:
 | `description` | Clinical description from CLIF mCIDE |
 | `*_examples` | Example names/strings from source systems |
 | `ricu_concept` | Corresponding concept name in ricu's concept-dict.json |
-| `mimic_iii_itemid` | Item ID(s) for MIMIC-III (chartevents, labevents, etc.) |
-| `mimic_iv_itemid` | Item ID(s) for MIMIC-IV |
 | `eicu_ids` | Table/column or lab name for eICU-CRD |
 | `hirid_ids` | Variable ID(s) for HiRID |
 | `aumc_ids` | Item ID(s) for AmsterdamUMCdb |
+| `sic_ids` | Item ID(s) for SICdb (Salzburg ICU Database) |
 
 ### ID Format Notes
 
@@ -68,7 +66,7 @@ OpenCLIF/
 
 ## Usage Examples
 
-### Python - Extract heart rate from MIMIC-IV
+### Python - Extract heart rate from eICU
 
 ```python
 import pandas as pd
@@ -76,16 +74,40 @@ import pandas as pd
 # Load mappings
 vitals = pd.read_csv('mappings/vitals/clif_vitals_categories.csv')
 
-# Get MIMIC-IV item IDs for heart rate
+# Get eICU mapping for heart rate
 hr_row = vitals[vitals['vital_category'] == 'heart_rate']
-mimic_iv_ids = hr_row['mimic_iv_itemid'].values[0].split('; ')
-# Returns: ['220045']
+eicu_col = hr_row['eicu_ids'].values[0]
+# Returns: 'col:heartrate' (column name in vitalperiodic table)
+
+# Extract column name
+col_name = eicu_col.replace('col:', '')
+
+# Use in query
+query = f"""
+SELECT patientunitstayid, observationoffset, {col_name}
+FROM vitalperiodic
+WHERE {col_name} IS NOT NULL
+"""
+```
+
+### Python - Extract norepinephrine from SICdb
+
+```python
+import pandas as pd
+
+# Load mappings  
+meds = pd.read_csv('mappings/medications/clif_medication_categories.csv')
+
+# Get SICdb DrugID for norepinephrine
+norepi_row = meds[meds['med_category'] == 'norepinephrine']
+sic_id = norepi_row['sic_ids'].values[0]
+# Returns: '1562'
 
 # Use in query
 query = f"""
 SELECT *
-FROM chartevents
-WHERE itemid IN ({','.join(mimic_iv_ids)})
+FROM medication
+WHERE DrugID = {sic_id}
 """
 ```
 
@@ -131,10 +153,10 @@ hr_data <- load_concepts("hr", "miiv")
 
 - **CLIF mCIDE definitions**: [Common-Longitudinal-ICU-data-Format/skills](https://github.com/Common-Longitudinal-ICU-data-Format/skills/tree/main/skills/clif-icu/mCIDE)
 - **ricu concept mappings**: [eth-mds/ricu](https://github.com/eth-mds/ricu) - Bennett et al., "ricu: R's interface to intensive care data"
-- **MIMIC databases**: Johnson et al., PhysioNet
 - **eICU-CRD**: Pollard et al., PhysioNet
 - **HiRID**: Hyland et al., PhysioNet
 - **AmsterdamUMCdb**: Thoral et al., Amsterdam UMC
+- **SICdb**: Salzburg Intensive Care Database, PhysioNet
 
 ## Contributing
 
