@@ -1,0 +1,10 @@
+device_category,description,device_name_examples,ricu_concept,mimic_iii_itemid,mimic_iv_itemid,eicu_ids,hirid_ids,aumc_ids
+IMV,Invasive Mechanical Ventilation,"Endotracheal Tube Ventilation, Tracheostomy Ventilation",mech_vent,,"225792; 225794",,15001552,"9328; 10740; 12635"
+NIPPV,Non-Invasive Positive Pressure Ventilation,"BiPAP, AVAPS",mech_vent,,"225792; 225794",,15001552,"9328; 10740; 12635"
+CPAP,Continuous Positive Airway Pressure,"CPAP Mask, CPAP Therapy",,,,,, 
+High Flow NC,High Flow Nasal Cannula,"High Flow Oxygen Therapy, Optiflow",,,,,,
+Face Mask,Face Mask oxygen delivery,"Simple Face Mask, Non-Rebreather Mask",,,,,,
+Trach Collar,Tracheostomy collar,"Trach Collar with Aerosol, T-Piece",,,,,,
+Nasal Cannula,Standard nasal cannula,"Low Flow Nasal Cannula, NC 1-6L",,,,,,
+Room Air,Breathing room air without supplemental oxygen,"RA, Room Air - No O2",,,,,,
+Other,Other respiratory support device not specified above,"Venturi Mask, Oxygen Tent",,,,,,

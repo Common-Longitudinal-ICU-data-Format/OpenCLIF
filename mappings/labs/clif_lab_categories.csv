@@ -1,0 +1,53 @@
+lab_category,reference_unit,description,lab_name_type_examples,lab_order_category,ricu_concept,mimic_iii_itemid,mimic_iv_itemid,eicu_ids,hirid_ids,aumc_ids
+albumin,g/dL,,"ALBUMIN, ALB, SERUM ALBUMIN",lft,alb,50862,50862,albumin,24000605,"6801; 9937"
+alkaline_phosphatase,U/L,,"ALP, ALKALINE PHOS, ALK PHOS, ALKP",lft,alp,50863,50863,alkaline phos.,20002700,"6803; 11984"
+alt,U/L,,"ALT, SGPT, ALANINE TRANSAMINASE",lft,alt,50861,50861,ALT (SGPT),20002600,"6800; 11978"
+ast,U/L,,"AST, SGOT, ASPARTATE TRANSAMINASE",lft,ast,50878,50878,AST (SGOT),24000330,"6806; 11990"
+basophils_percent,%,,"BASO%, BASOPHILS %, BASO PERCENT",cbc,basos,51146,51146,-basos,,"11710; 14256"
+basophils_absolute,10^3/µL,,"BASO#, BASOPHILS ABS, BASO ABSOLUTE",cbc,,,,,, 
+bicarbonate,mmol/L,bicarbonate from BMP (sometimes reported out as CO2) not from ABG/VBG,"CO2, HCO3, BICARB, CARBON DIOXIDE",bmp,bicar,50882,50882,bicarbonate,20004200,"6810; 9992"
+bilirubin_total,mg/dL,,"TBILI, TOTAL BILI, BILIRUBIN TOTAL",lft,bili,50885,50885,total bilirubin,20004300,"6813; 9945"
+bilirubin_conjugated,mg/dL,,"DBILI, DIRECT BILI, CONJUGATED BILI",lft,bili_dir,50883,50883,direct bilirubin,24000560,6812
+bilirubin_unconjugated,mg/dL,,"INDIRECT BILI, UNCONJUGATED BILI, IBILI",lft,,,,,,
+bun,mg/dL,,"BUN, UREA NITROGEN, BLOOD UREA",bmp,bun,51006,51006,BUN,20004100,"6850; 9943"
+calcium_total,mg/dL,includes lactate,"CA, CALCIUM, TOTAL CALCIUM, SERUM CA",misc,ca,50893,50893,calcium,20005100,"6817; 9933"
+calcium_ionized,mg/dL,,"IONIZED CA, ICA, FREE CALCIUM",bmp,cai,50808,50808,ionized calcium,24000522,"6815; 8915; 9560; 9561; 10267"
+chloride,mmol/L,,"CL, CHLORIDE, SERUM CHLORIDE",bmp,cl,50902,50902,chloride,"24000439; 24000521",9930
+creatinine,mg/dL,,"CR, CREAT, SERUM CREATININE",bmp,crea,50912,50912,creatinine,20000600,"6836; 9941; 14216"
+crp,mg/L,includes lactate,"CRP, C-REACTIVE PROTEIN, HS-CRP",misc,crp,50889,50889,CRP,20002200,"6825; 10079"
+eosinophils_percent,%,,"EOS%, EOSINOPHILS %, EO PERCENT",cbc,eos,51200,51200,-eos,,"6773; 9967"
+eosinophils_absolute,10^3/µL,,"EOS#, EOSINOPHILS ABS, EO ABSOLUTE",cbc,,,,,,
+esr,mm/hour,includes lactate,"ESR, SED RATE, SEDIMENTATION RATE",misc,esr,51288,51288,,24000668,"6808; 11902"
+ferritin,ng/mL,includes lactate,"FERRITIN, SERUM FERRITIN, FERR",misc,,,,,,
+glucose_fingerstick,mg/dL,includes lactate,"POC GLUCOSE, FINGERSTICK GLUCOSE, ACCUCHECK, BEDSIDE GLUCOSE",misc,glu,"50809; 50931","50809; 50931","glucose; bedside glucose","20005110; 24000523; 24000585","6833; 9557; 9947"
+glucose_serum,mg/dL,,"GLUCOSE, SERUM GLUCOSE, BLOOD GLUCOSE, GLU",bmp,glu,"50809; 50931","50809; 50931","glucose; bedside glucose","20005110; 24000523; 24000585","6833; 9557; 9947"
+hemoglobin,g/dL,,"HGB, HB, HEMOGLOBIN",cbc,hgb,51222,51222,Hgb,"24000548; 24000836; 20000900","6778; 9553; 9960; 10286; 19703"
+phosphate,mg/dL,sometimes called 'phosphorus' in the EHR,"PHOS, PHOSPHORUS, PHOSPHATE, SERUM PHOS",coags,phos,50970,50970,phosphate,20002500,"6828; 9935"
+inr,(no units),includes lactate,"INR, INTERNATIONAL NORMALIZED RATIO",misc,inr_pt,51237,51237,PT - INR,24000567,11893
+lactate,mmol/L,includes lactate,"LACTATE, LACTIC ACID, LAC",misc,lact,50813,50813,lactate,24000524,"6837; 9580; 10053"
+ldh,U/L,,"LDH, LD, LACTATE DEHYDROGENASE",cbc,,,,,,
+lymphocytes_percent,%,,"LYMPH%, LYMPHOCYTES %, LYMPH PERCENT",cbc,lymph,51244,51244,-lymphs,24000480,"11846; 14258"
+lymphocytes_absolute,10^3/µL,includes lactate,"LYMPH#, LYMPHOCYTES ABS, LYMPH ABSOLUTE",misc,,,,,,
+magnesium,mg/dL,,"MG, MAGNESIUM, SERUM MG",cbc,mg,50960,50960,magnesium,24000230,"6839; 9952"
+monocytes_percent,%,,"MONO%, MONOCYTES %, MONO PERCENT",cbc,,,,,,
+monocytes_absolute,10^3/µL,,"MONO#, MONOCYTES ABS, MONO ABSOLUTE",cbc,,,,,,
+neutrophils_percent,%,,"NEUT%, NEUTROPHILS %, NEUT PERCENT, PMN%",cbc,neut,51256,51256,-polys,24000550,"6786; 11856; 14254"
+neutrophils_absolute,10^3/µL,includes abg/vbg/mixed venous/etc,"NEUT#, ANC, NEUTROPHILS ABS, PMN#",blood_gas,,,,,,
+pco2_arterial,mmHg,includes abg/vbg/mixed venous/etc,"PACO2, ARTERIAL PCO2, ABG PCO2",blood_gas,pco2,50818,50818,paCO2,20001200,"6846; 9990; 21213"
+po2_arterial,mmHg,includes abg/vbg/mixed venous/etc,"PAO2, ARTERIAL PO2, ABG PO2",blood_gas,po2,50821,50821,paO2,20000200,"7433; 9996; 21214"
+pco2_venous,mmHg,includes abg/vbg/mixed venous/etc,"PVCO2, VENOUS PCO2, VBG PCO2",blood_gas,,,,,,
+ph_arterial,(no units),includes lactate,"ABG PH, ARTERIAL PH, BLOOD PH",misc,ph,50820,50820,pH,20000300,"6848; 12310"
+ph_venous,(no units),,"VBG PH, VENOUS PH",cbc,,,,,,
+platelet_count,10^3/µL,includes abg/vbg/mixed venous/etc,"PLT, PLATELETS, PLATELET COUNT",blood_gas,plt,51265,51265,platelets x 1000,20000110,"6797; 9964; 10409; 14252"
+potassium,mmol/L,,"K, POTASSIUM, SERUM K",bmp,k,50971,50971,potassium,"20000500; 24000520; 24000833; 24000867","6835; 9556; 9927; 10285"
+procalcitonin,ng/mL,includes lactate,"PCT, PROCALCITONIN, PRO-CALCITONIN",misc,,,,,,
+pt,sec,,"PT, PROTIME, PROTHROMBIN TIME",coags,pt,51274,51274,PT,,6789
+ptt,sec,,"PTT, APTT, ACTIVATED PTT",coags,ptt,51275,51275,PTT,20004410,17982
+so2_arterial,%,includes abg/vbg/mixed venous/etc,"SAO2, ARTERIAL SAT, ABG O2 SAT",blood_gas,sao2,"834; 220227; 50817","220227; 50817",O2 Sat (%),20000800,12311
+so2_mixed_venous,%,includes abg/vbg/mixed venous/etc,"SVO2, MIXED VENOUS SAT, SVMVO2",blood_gas,,,,,,
+so2_central_venous,%,includes abg/vbg/mixed venous/etc,"SCVO2, CENTRAL VENOUS SAT",blood_gas,,,,,,
+sodium,mmol/L,,"NA, SODIUM, SERUM NA",bmp,na,50983,50983,sodium,"20000400; 24000519; 24000658; 24000835; 24000866","6840; 9555; 9924; 10284"
+total_protein,g/dL,,"TP, TOTAL PROTEIN, SERUM PROTEIN",lft,,,,,,
+troponin_i,ng/L,includes lactate,"TROP I, TROPONIN I, TNI",misc,tri,51002,51002,troponin - I,,
+troponin_t,ng/L,includes lactate,"TROP T, TROPONIN T, TNT",misc,tnt,51003,51003,troponin - T,24000806,10407
+wbc,10^3/µL,,"WBC, WHITE BLOOD CELL, LEUKOCYTES",cbc,wbc,51301,51301,WBC x 1000,20000700,"6779; 9965"
